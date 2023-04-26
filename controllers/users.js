@@ -5,6 +5,12 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 const { NODE_ENV_DEV } = require('../utils/constants');
 const { NotFoundError, BadRequestError, ConflictError } = require('../utils/errors');
+const {
+  userConflictMessage,
+  userNotFoundMessage,
+  userSignupBadRequestMessage,
+  userUpdateBadRequestMessage,
+} = require('../utils/messages');
 
 module.exports.getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
@@ -12,7 +18,7 @@ module.exports.getUserInfo = (req, res, next) => {
       if (user) {
         res.send(user);
       } else {
-        next(new NotFoundError('Пользователь не найден'));
+        next(new NotFoundError(userNotFoundMessage));
       }
     })
     .catch(next);
@@ -25,14 +31,14 @@ module.exports.updateUserInfo = (req, res, next) => {
       if (user) {
         res.send(user);
       } else {
-        next(new NotFoundError('Пользователь не найден'));
+        next(new NotFoundError(userNotFoundMessage));
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('Некорректный идентификатор пользователя'));
-      } else if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении профиля'));
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError(userUpdateBadRequestMessage));
+      } else if (err.code === 11000) {
+        next(new ConflictError(userConflictMessage));
       } else {
         next(err);
       }
@@ -50,9 +56,9 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь с данным email уже зарегистрирован'));
+        next(new ConflictError(userConflictMessage));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+        next(new BadRequestError(userSignupBadRequestMessage));
       } else {
         next(err);
       }
