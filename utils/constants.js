@@ -1,7 +1,7 @@
 const rateLimiter = require('express-rate-limit');
 
 const urlRegEx = /^(https?:\/\/)(www\.)?([\w-._~:/?#[\]@!$&'()*+,;=]+\.)+[\w-._~:/?#[\]@!$&'()*+,;=]+#?$/;
-const DB_URL_DEV = 'mongodb://localhost:27017/mestodb';
+const DB_URL_DEV = 'mongodb://localhost:27017/bitfilmsdb';
 const NODE_ENV_DEV = require('crypto').randomBytes(32).toString('hex');
 
 const limiter = rateLimiter({
