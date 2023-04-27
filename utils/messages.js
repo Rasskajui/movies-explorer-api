@@ -10,6 +10,9 @@ const userSignupBadRequestMessage = 'Переданы некорректные �
 
 const pathNotFoundMessage = 'Неправильный путь';
 
+const unauthorizedErrorMessage = 'Необходима авторизация';
+const defaultErrorMessage = 'На сервере произошла ошибка';
+
 module.exports = {
   movieBadRequestMessage,
   movieDeletedMessage,
@@ -20,4 +23,6 @@ module.exports = {
   userSignupBadRequestMessage,
   userUpdateBadRequestMessage,
   pathNotFoundMessage,
+  unauthorizedErrorMessage,
+  defaultErrorMessage,
 };
